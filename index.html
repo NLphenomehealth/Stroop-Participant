@@ -38,125 +38,127 @@
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen">
 
-    <!-- Skip Button for Testing -->
-    <button id="skipBtn" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg text-sm" onclick="skipToNext()">Skip →</button>
+    <!-- This container will be replaced by an error message if needed -->
+    <div id="main-content">
+        <!-- Skip Button for Testing -->
+        <button id="skipBtn" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg text-sm" onclick="skipToNext()">Skip →</button>
 
-    <div id="app-container" class="bg-white p-6 sm:p-10 rounded-2xl shadow-2xl max-w-4xl w-full text-center relative transition-all duration-500">
-        
-        <!-- Session ID Display -->
-        <div id="sessionIdContainer" class="absolute top-4 left-4 bg-indigo-100 text-indigo-800 text-sm font-semibold px-4 py-2 rounded-lg shadow-md hidden">
-            Session ID: <span id="sessionIdDisplay" class="font-bold"></span>
-        </div>
+        <div id="app-container" class="bg-white p-6 sm:p-10 rounded-2xl shadow-2xl max-w-4xl w-full text-center relative transition-all duration-500">
+            
+            <!-- Session ID Display -->
+            <div id="sessionIdContainer" class="absolute top-4 left-4 bg-indigo-100 text-indigo-800 text-sm font-semibold px-4 py-2 rounded-lg shadow-md hidden">
+                Session ID: <span id="sessionIdDisplay" class="font-bold"></span>
+            </div>
 
-        <!-- Welcome Screen -->
-        <div id="welcome" class="screen">
-            <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-800 mb-4">Color Response Test</h1>
-            <p class="text-gray-600 mb-8 text-lg">This test will take approximately 19 minutes.</p>
-            <button class="button bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-lg text-xl shadow-lg transform hover:scale-105 transition-transform" onclick="startProtocol()">Start Test</button>
-        </div>
-        
-        <!-- Resting Baseline Screen -->
-        <div id="baseline" class="screen hidden">
-            <h2 class="text-3xl font-bold text-gray-800 mb-4">Resting Baseline</h2>
-            <p class="text-gray-600 mb-6">Please relax, clear your mind, and sit quietly for five minutes.</p>
-            <button class="button bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg" id="startBaselineBtn" onclick="startBaselineTimer()">Start Timer</button>
-            <div class="text-6xl font-mono font-bold my-4 text-gray-800" id="baselineTimer" style="display: none;">5:00</div>
-        </div>
-        
-        <!-- Instructions Screen -->
-        <div id="instructions" class="screen hidden">
-            <h2 class="text-3xl font-bold text-gray-800 mb-6">Instructions</h2>
-            <div class="text-left max-w-2xl mx-auto text-gray-700 space-y-4">
-                <p class="font-bold text-red-600 text-lg">Important: Respond to the <span class="underline">color</span> of the text, not the word itself.</p>
-                <p><strong>Time Limit:</strong> You have 1.5 seconds to respond. A slow response counts as wrong.</p>
-                <p><strong>Response Keys:</strong> Use your keyboard (<strong class="text-indigo-600">R, G, B, Y</strong>) or click the on-screen buttons.</p>
-                <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                     <p class="font-bold mb-2">Examples:</p>
-                     <p><span style="color: red; font-weight: bold;">GREEN</span> → Respond <strong class="text-red-600">RED</strong></p>
-                     <p><span style="color: blue; font-weight: bold;">RED</span> → Respond <strong class="text-blue-600">BLUE</strong></p>
+            <!-- Welcome Screen -->
+            <div id="welcome" class="screen">
+                <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-800 mb-4">Color Response Test</h1>
+                <p class="text-gray-600 mb-8 text-lg">This test will take approximately 19 minutes.</p>
+                <button class="button bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-lg text-xl shadow-lg transform hover:scale-105 transition-transform" onclick="startProtocol()">Start Test</button>
+            </div>
+            
+            <!-- Resting Baseline Screen -->
+            <div id="baseline" class="screen hidden">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">Resting Baseline</h2>
+                <p class="text-gray-600 mb-6">Please relax, clear your mind, and sit quietly for five minutes.</p>
+                <button class="button bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg" id="startBaselineBtn" onclick="startBaselineTimer()">Start Timer</button>
+                <div class="text-6xl font-mono font-bold my-4 text-gray-800" id="baselineTimer" style="display: none;">5:00</div>
+            </div>
+            
+            <!-- Instructions Screen -->
+            <div id="instructions" class="screen hidden">
+                <h2 class="text-3xl font-bold text-gray-800 mb-6">Instructions</h2>
+                <div class="text-left max-w-2xl mx-auto text-gray-700 space-y-4">
+                    <p class="font-bold text-red-600 text-lg">Important: Respond to the <span class="underline">color</span> of the text, not the word itself.</p>
+                    <p><strong>Time Limit:</strong> You have 1.5 seconds to respond. A slow response counts as wrong.</p>
+                    <p><strong>Response Keys:</strong> Use your keyboard (<strong class="text-indigo-600">R, G, B, Y</strong>) or click the on-screen buttons.</p>
+                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                         <p class="font-bold mb-2">Examples:</p>
+                         <p><span style="color: red; font-weight: bold;">GREEN</span> → Respond <strong class="text-red-600">RED</strong></p>
+                         <p><span style="color: blue; font-weight: bold;">RED</span> → Respond <strong class="text-blue-600">BLUE</strong></p>
+                    </div>
                 </div>
+                <button class="button bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-lg text-xl shadow-lg transform hover:scale-105 transition-transform mt-8" onclick="startPractice()">Start Practice</button>
             </div>
-            <button class="button bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-lg text-xl shadow-lg transform hover:scale-105 transition-transform mt-8" onclick="startPractice()">Start Practice</button>
-        </div>
-        
-        <!-- Practice Screen -->
-        <div id="practice" class="screen hidden">
-             <h2 class="text-3xl font-bold text-gray-800 mb-2">Practice Session</h2>
-             <div class="instructions text-gray-600 mb-4 max-w-xl mx-auto" id="practiceInstruction">Let's practice.</div>
-             <div class="stroop-word text-8xl my-8" id="practiceWord">READY</div>
-             <div class="flex justify-center space-x-4 my-6" id="practiceButtons">
-                <button class="response-button" style="color:red;" onclick="checkPracticeResponse('red')">R</button>
-                <button class="response-button" style="color:green;" onclick="checkPracticeResponse('green')">G</button>
-                <button class="response-button" style="color:blue;" onclick="checkPracticeResponse('blue')">B</button>
-                <button class="response-button" style="color:#FFBF00;" onclick="checkPracticeResponse('yellow')">Y</button>
-            </div>
-             <div class="text-4xl font-bold h-12 my-4" id="practiceFeedback"></div>
-             <button class="button hidden bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-lg" id="startTestBtn" onclick="startColorTest()">Begin Test</button>
-        </div>
-
-        <!-- Color Response Test Screen -->
-        <div id="colorTest" class="screen hidden">
-            <div id="statusIndicator" class="absolute bottom-4 left-4 font-bold py-2 px-5 rounded-full text-white text-lg shadow-lg transition-all duration-300"></div>
-            <h2 id="blockTitle" class="text-3xl font-bold text-gray-800">Color Response - Block 1</h2>
-            <div class="text-5xl font-mono font-bold my-2 text-gray-700" id="colorTimer">3:00</div>
-            <div class="stroop-word text-9xl my-8" id="colorWord">READY</div>
-            <div class="flex justify-center space-x-2 sm:space-x-4 my-6">
-                <button class="response-button" style="--btn-color: red;" onclick="checkResponse('red')">R</button>
-                <button class="response-button" style="--btn-color: green;" onclick="checkResponse('green')">G</button>
-                <button class="response-button" style="--btn-color: blue;" onclick="checkResponse('blue')">B</button>
-                <button class="response-button" style="--btn-color: #FFBF00;" onclick="checkResponse('yellow')">Y</button>
-            </div>
-            <div class="text-4xl font-bold h-12" id="feedback"></div>
-            <div class="absolute bottom-4 right-4 text-red-500 text-xl font-bold">Wrong: <span id="wrong">0</span></div>
-        </div>
-
-        <!-- Block Complete Screen -->
-        <div id="blockComplete" class="screen hidden">
-            <h2 id="blockCompleteTitle" class="text-4xl font-extrabold text-gray-800 mb-6">Block Complete</h2>
-             <div class="flex flex-col sm:flex-row justify-around items-center gap-6">
-                <!-- Your Score -->
-                <div class="border-4 border-red-400 bg-red-50 p-6 rounded-2xl w-full sm:w-auto shadow-lg">
-                    <p class="text-red-600 font-bold text-xl uppercase mb-2">❌ Your Score ❌</p>
-                    <p class="text-lg">Correct: <span id="blockCorrect" class="font-bold text-green-600">0</span></p>
-                    <p class="text-lg">Wrong: <span id="blockWrong" class="font-bold text-red-600">0</span></p>
-                    <p class="text-2xl mt-2 font-bold">Accuracy: <span id="blockAccuracy" class="text-red-600">0</span>%</p>
+            
+            <!-- Practice Screen -->
+            <div id="practice" class="screen hidden">
+                 <h2 class="text-3xl font-bold text-gray-800 mb-2">Practice Session</h2>
+                 <div class="instructions text-gray-600 mb-4 max-w-xl mx-auto" id="practiceInstruction">Let's practice.</div>
+                 <div class="stroop-word text-8xl my-8" id="practiceWord">READY</div>
+                 <div class="flex justify-center space-x-4 my-6" id="practiceButtons">
+                    <button class="response-button" style="color:red;" onclick="checkPracticeResponse('red')">R</button>
+                    <button class="response-button" style="color:green;" onclick="checkPracticeResponse('green')">G</button>
+                    <button class="response-button" style="color:blue;" onclick="checkPracticeResponse('blue')">B</button>
+                    <button class="response-button" style="color:#FFBF00;" onclick="checkPracticeResponse('yellow')">Y</button>
                 </div>
-                <!-- Competitor Score -->
-                <div class="border-4 border-green-400 bg-green-50 p-6 rounded-2xl w-full sm:w-auto shadow-lg">
-                    <p class="text-green-600 font-bold text-xl uppercase mb-2">🏆 Competitor Score 🏆</p>
-                    <p class="text-lg">Correct: <span id="competitorCorrect" class="font-bold text-green-600">0</span></p>
-                    <p class="text-lg">Wrong: <span id="competitorWrong" class="font-bold text-red-600">0</span></p>
-                    <p class="text-2xl mt-2 font-bold">Accuracy: <span id="competitorAccuracy" class="text-green-600">0</span>%</p>
-                </div>
+                 <div class="text-4xl font-bold h-12 my-4" id="practiceFeedback"></div>
+                 <button class="button hidden bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-lg" id="startTestBtn" onclick="startColorTest()">Begin Test</button>
             </div>
-            <button class="button bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-lg mt-8" id="nextBlockBtn" onclick="nextBlock()">Continue</button>
-        </div>
 
-        <!-- Meal Screen -->
-        <div id="meal" class="screen hidden">
-            <h2 class="text-3xl font-bold text-gray-800 mb-4">Meal Time</h2>
-            <p class="text-gray-600 max-w-md mx-auto mb-6">Please drink the entire liquid meal within 5 minutes. Pace yourself to finish as the timer ends.</p>
-            <button class="button bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg" id="startMealBtn" onclick="startMealTimer()">Start Meal Timer</button>
-            <div class="text-6xl font-mono font-bold my-4 text-gray-800" id="mealTimer" style="display: none;">5:00</div>
-        </div>
-        
-        <!-- Complete Screen -->
-        <div id="complete" class="screen hidden">
-            <h1 class="text-5xl font-extrabold text-green-600 mb-4">Protocol Complete</h1>
-            <p class="text-gray-700 text-lg">Thank you for your participation. You may now close this page.</p>
+            <!-- Color Response Test Screen -->
+            <div id="colorTest" class="screen hidden">
+                <div id="statusIndicator" class="absolute bottom-4 left-4 font-bold py-2 px-5 rounded-full text-white text-lg shadow-lg transition-all duration-300"></div>
+                <h2 id="blockTitle" class="text-3xl font-bold text-gray-800">Color Response - Block 1</h2>
+                <div class="text-5xl font-mono font-bold my-2 text-gray-700" id="colorTimer">3:00</div>
+                <div class="stroop-word text-9xl my-8" id="colorWord">READY</div>
+                <div class="flex justify-center space-x-2 sm:space-x-4 my-6">
+                    <button class="response-button" style="--btn-color: red;" onclick="checkResponse('red')">R</button>
+                    <button class="response-button" style="--btn-color: green;" onclick="checkResponse('green')">G</button>
+                    <button class="response-button" style="--btn-color: blue;" onclick="checkResponse('blue')">B</button>
+                    <button class="response-button" style="--btn-color: #FFBF00;" onclick="checkResponse('yellow')">Y</button>
+                </div>
+                <div class="text-4xl font-bold h-12" id="feedback"></div>
+                <div class="absolute bottom-4 right-4 text-red-500 text-xl font-bold">Wrong: <span id="wrong">0</span></div>
+            </div>
+
+            <!-- Block Complete Screen -->
+            <div id="blockComplete" class="screen hidden">
+                <h2 id="blockCompleteTitle" class="text-4xl font-extrabold text-gray-800 mb-6">Block Complete</h2>
+                 <div class="flex flex-col sm:flex-row justify-around items-center gap-6">
+                    <!-- Your Score -->
+                    <div class="border-4 border-red-400 bg-red-50 p-6 rounded-2xl w-full sm:w-auto shadow-lg">
+                        <p class="text-red-600 font-bold text-xl uppercase mb-2">❌ Your Score ❌</p>
+                        <p class="text-lg">Correct: <span id="blockCorrect" class="font-bold text-green-600">0</span></p>
+                        <p class="text-lg">Wrong: <span id="blockWrong" class="font-bold text-red-600">0</span></p>
+                        <p class="text-2xl mt-2 font-bold">Accuracy: <span id="blockAccuracy" class="text-red-600">0</span>%</p>
+                    </div>
+                    <!-- Competitor Score -->
+                    <div class="border-4 border-green-400 bg-green-50 p-6 rounded-2xl w-full sm:w-auto shadow-lg">
+                        <p class="text-green-600 font-bold text-xl uppercase mb-2">🏆 Competitor Score 🏆</p>
+                        <p class="text-lg">Correct: <span id="competitorCorrect" class="font-bold text-green-600">0</span></p>
+                        <p class="text-lg">Wrong: <span id="competitorWrong" class="font-bold text-red-600">0</span></p>
+                        <p class="text-2xl mt-2 font-bold">Accuracy: <span id="competitorAccuracy" class="text-green-600">0</span>%</p>
+                    </div>
+                </div>
+                <button class="button bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-lg mt-8" id="nextBlockBtn" onclick="nextBlock()">Continue</button>
+            </div>
+
+            <!-- Meal Screen -->
+            <div id="meal" class="screen hidden">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">Meal Time</h2>
+                <p class="text-gray-600 max-w-md mx-auto mb-6">Please drink the entire liquid meal within 5 minutes. Pace yourself to finish as the timer ends.</p>
+                <button class="button bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg" id="startMealBtn" onclick="startMealTimer()">Start Meal Timer</button>
+                <div class="text-6xl font-mono font-bold my-4 text-gray-800" id="mealTimer" style="display: none;">5:00</div>
+            </div>
+            
+            <!-- Complete Screen -->
+            <div id="complete" class="screen hidden">
+                <h1 class="text-5xl font-extrabold text-green-600 mb-4">Protocol Complete</h1>
+                <p class="text-gray-700 text-lg">Thank you for your participation. You may now close this page.</p>
+            </div>
         </div>
     </div>
 
     <!-- Firebase -->
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, serverTimestamp, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, serverTimestamp, setLogLevel } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
 
         // --- GLOBAL STATE & CONSTANTS ---
         let db, auth;
         let sessionId = null;
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
         let gameState = {}; // Single object to hold all state for Firestore
         
         let mainTimer = null;
@@ -177,11 +179,15 @@
 
         // --- INITIALIZATION ---
         window.onload = function() {
-            const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
-            if (!firebaseConfig) {
-                document.body.innerHTML = '<h1>Error: Firebase configuration not found.</h1>';
-                return;
-            }
+            // Your web app's Firebase configuration
+            const firebaseConfig = {
+                apiKey: "AIzaSyAY-vUFdaTXQR9-B9tPFeQNgUd2CHdEBJ8",
+                authDomain: "stroop-comp.firebaseapp.com",
+                projectId: "stroop-comp",
+                storageBucket: "stroop-comp.firebasestorage.app",
+                messagingSenderId: "832246150640",
+                appId: "1:832246150640:web:e35225f1dd629fa9335935"
+            };
             
             try {
                 const app = initializeApp(firebaseConfig);
@@ -191,7 +197,10 @@
                 signIn();
             } catch (e) {
                 console.error("Firebase initialization failed:", e);
-                document.body.innerHTML = '<h1>Error: Could not connect to the server.</h1>';
+                document.getElementById('main-content').innerHTML = `
+                    <div class="bg-white p-8 rounded-lg shadow-xl">
+                        <h1 class="text-2xl font-bold text-red-600">Error: Could not connect to the server.</h1>
+                    </div>`;
             }
         };
 
@@ -201,12 +210,33 @@
                 initializeSession();
             } catch (error) {
                 console.error("Authentication Error", error);
-                document.body.innerHTML = `<h1>Authentication Failed</h1><p>${error.message}</p>`;
+                let errorMessage = `<h1>Authentication Failed</h1><p>${error.message}</p>`;
+                
+                // Check for the specific error and provide helpful instructions.
+                if (error.code === 'auth/configuration-not-found' || error.code === 'auth/operation-not-allowed') {
+                    errorMessage = `
+                        <div class="text-left max-w-3xl mx-auto bg-red-50 border-l-4 border-red-500 p-6 rounded-lg">
+                            <h1 class="text-2xl font-extrabold text-red-700 mb-4">Action Required: Enable Anonymous Sign-In</h1>
+                            <p class="text-lg text-gray-800 mb-4">This app needs permission to connect to the database. This is a one-time setup step in your Firebase project.</p>
+                            <p class="font-bold text-gray-900 mb-2">Please follow these steps to fix this:</p>
+                            <ol class="list-decimal list-inside space-y-2 text-gray-700">
+                                <li>Go to the <a href="https://console.firebase.google.com/" target="_blank" class="text-blue-600 underline font-semibold">Firebase Console</a> and select your project (<strong>stroop-comp</strong>).</li>
+                                <li>In the left menu, click <strong>Build > Authentication</strong>.</li>
+                                <li>On the Authentication page, click the <strong>Sign-in method</strong> tab.</li>
+                                <li>Find <strong>Anonymous</strong> in the list of sign-in providers and click on it.</li>
+                                <li>Click the <strong>Enable</strong> toggle switch, then click <strong>Save</strong>.</li>
+                                <li>Once you've saved, come back here and <strong>refresh this page</strong>. The app will then work correctly.</li>
+                            </ol>
+                        </div>
+                    `;
+                }
+                document.getElementById('main-content').innerHTML = `<div class="p-4">${errorMessage}</div>`;
             }
         }
         
         function initializeSession() {
             sessionId = generateSessionId();
+            const appId = "stroop-comp"; // Hardcode project ID since __app_id is unavailable
             document.getElementById('sessionIdDisplay').textContent = sessionId;
             document.getElementById('sessionIdContainer').classList.remove('hidden');
             document.getElementById('sessionIdContainer').classList.add('glow');
@@ -222,6 +252,7 @@
         // --- CORE LOGIC ---
         function updateGameState(newState) {
             gameState = { ...gameState, ...newState, lastUpdate: serverTimestamp() };
+            const appId = "stroop-comp"; // Hardcode project ID
             if (db && sessionId) {
                 const sessionRef = doc(db, `artifacts/${appId}/public/data/sessions`, sessionId);
                 setDoc(sessionRef, gameState).catch(e => console.error("Firestore update failed: ", e));
@@ -542,6 +573,9 @@
             clearInterval(competitorInterval);
 
             switch(gameState.screenId) {
+                case 'welcome':
+                    startProtocol();
+                    break;
                 case 'baseline':
                     showScreen('instructions');
                     break;
