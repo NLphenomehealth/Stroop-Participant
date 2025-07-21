@@ -3,195 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sing-a-Song Challenge (Participant)</title>
+    <title>Color Response Test (Participant)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; }
-        .screen { transition: opacity 0.5s ease-in-out; }
-        .hidden { display: none; }
-        .passage-box {
-            background-color: #f9fafb;
-            border: 1px solid #e5e7eb;
-            border-radius: 0.75rem;
-            padding: 1.5rem;
-            text-align: left;
-            max-width: 48rem;
-            margin: 1rem auto;
+        .stroop-word {
+            font-weight: 900;
+            letter-spacing: 0.1em;
+            transition: opacity 0.15s ease-in-out;
+        }
+        #skipBtn {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
+            opacity: 0.6;
+            transition: opacity 0.2s;
+        }
+        #skipBtn:hover {
+            opacity: 1;
+        }
+        #progressBar {
+            transition: width 1.5s linear;
         }
     </style>
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
     <div id="main-content" class="w-full">
-        <div id="app-container" class="bg-white p-4 sm:p-8 rounded-2xl shadow-2xl max-w-5xl w-full text-center relative transition-all duration-500 mx-auto">
-            
+        <button id="skipBtn" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg text-sm" onclick="skipToNext()">Skip →</button>
+        <div id="app-container" class="bg-white p-4 sm:p-6 rounded-2xl shadow-2xl max-w-5xl w-full text-center relative transition-all duration-500 mx-auto">
             <div id="sessionIdContainer" class="absolute bottom-4 left-4 bg-indigo-100 text-indigo-800 text-sm font-semibold px-4 py-2 rounded-lg shadow-md hidden">
                 Session ID: <span id="sessionIdDisplay" class="font-bold"></span>
             </div>
-
-            <!-- Screen: Welcome -->
-            <div id="welcome" class="screen">
-                <div class="max-w-4xl mx-auto">
-                    <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-800 mb-4">BETA Pilot Study Stress Challenge</h1>
-                    <p class="text-gray-600 mb-8 text-lg">Please wait for the researcher to begin the session.</p>
-                </div>
-            </div>
-
-            <!-- Screen: Pre-Baseline Survey -->
-            <div id="preBaselineSurvey" class="screen hidden">
-                <div class="max-w-4xl mx-auto text-left space-y-4">
-                    <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Log Your Stress Level</h2>
-                    <p>Please open the <strong>MyT1Diabetes</strong> app and open the <strong>I’ve Noticed</strong> feature.</p>
-                    <p>Select ‘Write a note’, tap the text box and enter: <code class="bg-gray-200 text-red-600 p-1 rounded">Stress 0=[your response to the survey below]</code>. After you’ve entered your response, please select ‘Confirm’.</p>
-                    <div class="my-4 p-4 border rounded-lg bg-gray-50">
-                        <p class="font-bold">What is your current stress level?</p>
-                        <ul class="list-none space-y-1 mt-2">
-                            <li>○ 😰 Very stressed</li>
-                            <li>○ 😨 Stressed</li>
-                            <li>○ 😥 Somewhat stressed</li>
-                            <li>○ 😶 Neutral</li>
-                            <li>○ 😌 Not stressed at all</li>
-                            <li>○ ⚪️ No answer</li>
-                        </ul>
-                    </div>
-                    <p class="text-center font-semibold text-indigo-600 mt-4">Waiting for the researcher to continue...</p>
-                </div>
-            </div>
-
-            <!-- Screen: Resting Baseline -->
-            <div id="baseline" class="screen hidden">
-                <div class="max-w-4xl mx-auto">
-                    <h2 class="text-3xl font-bold text-gray-800 mb-4">Resting Baseline</h2>
-                    <p class="text-gray-600 mb-6">Please sit quietly and try to relax. The researcher will start the timer.</p>
-                    <div class="text-8xl font-mono font-bold my-4 text-gray-800" id="baselineTimer">3:00</div>
-                </div>
-            </div>
-            
-            <!-- Screen: Task Introduction -->
-            <div id="taskIntroduction" class="screen hidden">
-                <div class="max-w-4xl mx-auto">
-                    <h2 class="text-3xl font-bold text-gray-800 mb-4">Instructions</h2>
-                    <p class="text-gray-600 mb-6">Please listen to the researcher for instructions.</p>
-                    <p class="text-center font-semibold text-indigo-600 mt-4">Waiting for the researcher to continue...</p>
-                </div>
-            </div>
-
-            <!-- Screen: Generic Countdown -->
-            <div id="countdown" class="screen hidden">
-                <div class="max-w-4xl mx-auto">
-                    <h2 class="text-3xl font-bold text-gray-800 mb-4">Countdown</h2>
-                    <p class="text-gray-600 mb-6">Please remain seated and wait quietly.</p>
-                    <div class="text-8xl font-mono font-bold my-4 text-gray-800" id="countdownTimer">1:00</div>
-                </div>
-            </div>
-
-            <!-- Screen: Silent Reading -->
-            <div id="silentReading" class="screen hidden"></div>
-
-            <!-- Screen: Read Aloud -->
-            <div id="readAloud" class="screen hidden"></div>
-            
-            <!-- Screen: Read Aloud Challenge Instructions -->
-            <div id="challengeInstructions" class="screen hidden"></div>
-            
-            <!-- Screen: Sing a Song -->
-            <div id="singASong" class="screen hidden"></div>
-
-            <!-- Screen: Post-Task Survey -->
-            <div id="postTaskSurvey" class="screen hidden">
-                 <div class="max-w-4xl mx-auto text-left space-y-4">
-                    <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Log Your Stress Level</h2>
-                    <p>Please open the <strong>MyT1Diabetes</strong> app and open the <strong>I’ve Noticed</strong> feature.</p>
-                    <p>Select ‘Write a note’, tap the text box and enter: <code class="bg-gray-200 text-red-600 p-1 rounded">Stress 1=[your response to the survey below]</code>. After you’ve entered your response, please select ‘Confirm’.</p>
-                    <div class="my-4 p-4 border rounded-lg bg-gray-50">
-                        <p class="font-bold">What is your current stress level?</p>
-                        <ul class="list-none space-y-1 mt-2">
-                            <li>○ 😰 Very stressed</li>
-                            <li>○ 😨 Stressed</li>
-                            <li>○ 😥 Somewhat stressed</li>
-                            <li>○ 😶 Neutral</li>
-                            <li>○ 😌 Not stressed at all</li>
-                            <li>○ ⚪️ No answer</li>
-                        </ul>
-                    </div>
-                    <p class="text-center font-semibold text-indigo-600 mt-4">Waiting for the researcher to continue...</p>
-                </div>
-            </div>
-
-            <!-- Screen: Meal -->
-            <div id="meal" class="screen hidden">
-                <div class="max-w-4xl mx-auto">
-                    <h2 class="text-3xl font-bold text-gray-800 mb-4">Meal Time</h2>
-                    <p class="text-gray-600 mb-6">Please consume the provided liquid meal. The researcher will start the 5-minute timer.</p>
-                    <div class="text-8xl font-mono font-bold my-4 text-gray-800" id="mealTimer">5:00</div>
-                </div>
-            </div>
-
-            <!-- Screen: Complete -->
-            <div id="complete" class="screen hidden">
-                <div class="max-w-4xl mx-auto">
-                    <h1 class="text-5xl font-extrabold text-green-600 mb-4">Challenge Complete</h1>
-                    <div class="text-gray-700 text-lg mb-4 bg-indigo-50 p-6 rounded-lg">
-                        <p>Thank you for your participation. Please remember to avoid food, beverages (other than water), and strenuous or stressful activity until:</p>
-                        <p id="endTimeDisplay" class="text-4xl font-bold text-indigo-600 my-4"></p>
-                    </div>
-                    <p class="text-gray-600">You may now close this page.</p>
-                </div>
-            </div>
+            <!-- All Screens -->
+            <div id="welcome" class="screen"><div class="max-w-4xl mx-auto"><h1 class="text-4xl sm:text-5xl font-extrabold text-gray-800 mb-4">Color Response Test</h1><p class="text-gray-600 mb-8 text-lg">This test will take approximately 19 minutes.</p><button class="button bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-lg text-xl" onclick="startProtocol()">Start Test</button></div></div>
+            <div id="preBaselineSurvey" class="screen hidden"><div class="max-w-4xl mx-auto text-left space-y-4"><h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Log Your Stress Level</h2><p>Please open the <strong>MyT1Diabetes</strong> app and open the <strong>I’ve Noticed</strong> feature.</p><p>Select ‘Write a note’, tap the text box and enter: <code class="bg-gray-200 text-red-600 p-1 rounded">Stress 0=[your response to the survey below]</code>. After you’ve entered your response, please select ‘Confirm’.</p><div class="my-4"><p class="font-bold">What is your current stress level?</p><ul class="list-none space-y-1 mt-2"><li>○ 😰 Very stressed</li><li>○ 😨 Stressed</li><li>○ 😥 Somewhat stressed</li><li>○ 😶 Neutral</li><li>○ 😌 Not stressed at all</li><li>○ ⚪️ No answer</li></ul></div><div class="text-center mt-8"><button class="button bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-lg text-xl" onclick="showScreen('baseline')">Next</button></div></div></div>
+            <div id="baseline" class="screen hidden"><div class="max-w-4xl mx-auto"><h2 class="text-3xl font-bold text-gray-800 mb-4">Resting Baseline</h2><p class="text-gray-600 mb-6">Please relax, clear your mind, and sit quietly for three minutes.</p><button class="button bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg" id="startBaselineBtn" onclick="startBaselineTimer()">Start Timer</button><div class="text-6xl font-mono font-bold my-4 text-gray-800" id="baselineTimer" style="display: none;">3:00</div></div></div>
+            <div id="instructions" class="screen hidden"><div class="max-w-4xl mx-auto"><h2 class="text-3xl font-bold text-gray-800 mb-6">Color Response Instructions</h2><div class="text-left mx-auto text-gray-700 space-y-4"><p class="font-bold">Important: Respond to the <em>color</em> of the text, not the actual word.</p><p>You have two ways to respond:</p><ul class="list-disc list-inside ml-4 space-y-2"><li><strong>Use your keyboard:</strong><ul class="list-none list-inside ml-6 font-semibold"><li>Press <strong class="text-red-600">R</strong> for Red</li><li>Press <strong class="text-green-600">G</strong> for Green</li><li>Press <strong class="text-blue-600">B</strong> for Blue</li><li>Press <strong class="text-yellow-500">Y</strong> for Yellow</li></ul></li><li><strong>Click the on-screen buttons:</strong> Use your mouse to click the buttons below the word.<div class="flex justify-start space-x-2 my-2 pl-6"><div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg" style="border: 2px solid black; color: black;">R</div><div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg" style="border: 2px solid black; color: black;">G</div><div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg" style="border: 2px solid black; color: black;">B</div><div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg" style="border: 2px solid black; color: black;">Y</div></div></li></ul><p><strong>Examples:</strong></p><div class="bg-gray-50 p-4 rounded-lg border border-gray-200 space-y-1"><div>If you see <span style="color:red; font-weight: bold;">GREEN</span> → Press “R” for Red.</div><div>If you see <span style="color:blue; font-weight: bold;">RED</span> → Press “B” for Blue.</div></div><p>Focus on the color of the text, not what the word says.</p></div><button class="button bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-lg text-xl shadow-lg transform hover:scale-105 transition-transform mt-8" onclick="startPractice()">Start Practice</button></div></div>
+            <div id="practice" class="screen hidden"><div class="max-w-4xl mx-auto"><h2 class="text-3xl font-bold text-gray-800 mb-2">Practice Session</h2><div class="instructions text-gray-600 mb-4 mx-auto min-h-[10rem] flex items-center justify-center p-4"><div id="practiceInstruction">Let's practice responding to colors.</div></div><div id="practiceElements" class="hidden"><div class="stroop-word text-6xl my-4" id="practiceWord"></div><div class="flex justify-center space-x-4 my-6" id="practiceButtons"><button class="response-button" onclick="checkPracticeResponse('red')">R</button><button class="response-button" onclick="checkPracticeResponse('green')">G</button><button class="response-button" onclick="checkPracticeResponse('blue')">B</button><button class="response-button" onclick="checkPracticeResponse('yellow')">Y</button></div><div class="text-2xl font-bold h-10 my-4" id="practiceFeedback"></div></div><button id="practiceNextBtn" class="button hidden bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-lg mt-4" onclick="handlePracticeNext()">Next</button><button class="button hidden bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-lg" id="startTestBtn" onclick="startColorTest()">Begin Color Response Test</button></div></div>
+            <div id="colorTest" class="screen hidden relative"><div class="max-w-4xl mx-auto"><h2 id="blockTitle" class="text-3xl font-bold text-gray-800">Color Response - Block 1</h2><div class="text-5xl font-mono font-bold my-2 text-gray-700" id="colorTimer">3:00</div><div class="stroop-word text-7xl my-8" id="colorWord">READY</div><div class="w-full max-w-md mx-auto bg-gray-200 rounded-full h-4 mt-2 mb-6"><div id="progressBar" class="bg-indigo-600 h-4 rounded-full"></div></div><div class="flex justify-center space-x-2 sm:space-x-4 my-6"><button class="response-button" onclick="checkResponse('red')">R</button><button class="response-button" onclick="checkResponse('green')">G</button><button class="response-button" onclick="checkResponse('blue')">B</button><button class="response-button" onclick="checkResponse('yellow')">Y</button></div><div class="text-4xl font-bold h-12" id="feedback"></div></div><div class="absolute bottom-0 right-0 text-red-500 text-xl font-bold">Wrong: <span id="wrong">0</span></div></div>
+            <div id="blockComplete" class="screen hidden"><div class="max-w-4xl mx-auto"><h2 id="blockCompleteTitle" class="text-4xl font-extrabold text-gray-800 mb-6">Block Complete</h2><div class="flex flex-col sm:flex-row justify-around items-center gap-6"><div class="border-4 border-red-400 bg-red-50 p-6 rounded-2xl w-full sm:w-auto shadow-lg"><p class="text-red-600 font-bold text-xl uppercase mb-2">❌ Your Score ❌</p><p class="text-lg">Correct: <span id="blockCorrect" class="font-bold text-green-600">0</span></p><p class="text-lg">Wrong: <span id="blockWrong" class="font-bold text-red-600">0</span></p><p class="text-2xl mt-2 font-bold">Accuracy: <span id="blockAccuracy" class="text-red-600">0</span>%</p></div><div class="border-4 border-green-400 bg-green-50 p-6 rounded-2xl w-full sm:w-auto shadow-lg"><p class="text-green-600 font-bold text-xl uppercase mb-2">🏆 Competitor Score 🏆</p><p class="text-lg">Correct: <span id="competitorCorrect" class="font-bold text-green-600">0</span></p><p class="text-lg">Wrong: <span id="competitorWrong" class="font-bold text-red-600">0</span></p><p class="text-2xl mt-2 font-bold">Accuracy: <span id="competitorAccuracy" class="text-green-600">0</span>%</p></div></div><button class="button bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-lg mt-8" id="nextBlockBtn" onclick="nextBlock()">Continue</button></div></div>
+            <div id="preMealSurvey" class="screen hidden"><div class="max-w-4xl mx-auto text-left space-y-4"><h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Log Your Stress Level</h2><p>Please open the <strong>MyT1Diabetes</strong> app and open the <strong>I’ve Noticed</strong> feature.</p><p>Select ‘Write a note’, tap the text box and enter: <code class="bg-gray-200 text-red-600 p-1 rounded">Stress 1=[your response to the survey below]</code>. After you’ve entered your response, please select ‘Confirm’.</p><div class="my-4"><p class="font-bold">What is your current stress level?</p><ul class="list-none space-y-1 mt-2"><li>○ 😰 Very stressed</li><li>○ 😨 Stressed</li><li>○ 😥 Somewhat stressed</li><li>○ 😶 Neutral</li><li>○ 😌 Not stressed at all</li><li>○ ⚪️ No answer</li></ul></div><div class="text-center mt-8"><button class="button bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-lg text-xl" onclick="showScreen('meal', { timer: '5:00', timerRunning: false })">Next</button></div></div></div>
+            <div id="meal" class="screen hidden"><div class="max-w-4xl mx-auto"><h2 class="text-3xl font-bold text-gray-800 mb-4">Meal Time</h2><p class="text-gray-600 mx-auto mb-6">Please drink the entire liquid meal within five minutes. Pace yourself to finish as the timer ends.</p><button class="button bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg" id="startMealBtn" onclick="startMealTimer()">Start Meal Timer</button><div class="text-6xl font-mono font-bold my-4 text-gray-800" id="mealTimer" style="display: none;">5:00</div></div></div>
+            <div id="complete" class="screen hidden"><div class="max-w-4xl mx-auto"><h1 class="text-5xl font-extrabold text-green-600 mb-4">Protocol Complete</h1><p class="text-gray-700 text-lg">Thank you for your participation. You may now close this page.</p></div></div>
         </div>
     </div>
-
     <!-- Firebase -->
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
-        import { getFirestore, doc, setDoc, onSnapshot, serverTimestamp, setLogLevel } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
-
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, serverTimestamp, setLogLevel } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
+        // --- GLOBAL STATE & CONSTANTS ---
         let db, auth;
         let sessionId = null;
-        let gameState = {};
+        let gameState = {}; // Single object to hold all state for Firestore
         let mainTimer = null;
-        let remainingSeconds = 0;
-        let lastCommandId = null;
-        let sessionStartTime = null;
-        let heartbeatInterval = null;
-        let allConfigs = {}; 
-
-        const screenConfig = {
-            'baseline': { timerId: 'baselineTimer', duration: 180 },
-            'countdown': { timerId: 'countdownTimer', duration: 60 },
-            'silentReading': { timerId: 'taskTimer', duration: 12 },
-            'readAloud': { timerId: 'taskTimer', duration: 12 },
-            'challengeInstructions': { timerId: 'taskTimer', duration: 60 },
-            'singASong': { timerId: 'taskTimer', duration: 60 },
-            'meal': { timerId: 'mealTimer', duration: 300 },
-        };
-
-        function initializeContent() {
-             allConfigs = {
-                'silentReading': { taskContent: { title: 'Read the following passage Silently', passageTitle: 'Vacuum Cleaner', passageBody: 'A vacuum cleaner, also known simply as a vacuum, is a device that uses suction-often with agitation-to remove dirt and debris from carpets, hard floors, and other surfaces. The dirt is collected into a dust bag or plastic bin. Vacuum cleaners come in many forms, including stick, handheld, upright, canister, and specialized shop vacuums that can handle both solids and liquids.\n\nAlthough vacuum cleaner and vacuum are neutral terms, in some countries (e.g., the UK and Ireland) hoover is used generically (and as a verb) after the Hoover Company, one of the earliest producers of the device. In parts of New Zealand it\'s sometimes called a lux. The term sweeper may also be used, though it can refer specifically to a carpet sweeper.\n\nThe first manual vacuum designs using bellows appeared in the 1860s; motorized versions followed at the turn of the 20th century, leading to rapid innovation during that decade.'}},
-                'readAloud1_content': { taskContent: { title: 'Read the following passage Aloud', passageTitle: 'Paper Clip', passageBody: 'A paper clip (or paperclip) is a small steel-wire device (sometimes plastic-coated) bent into loops that hold sheets of paper together by torsion and friction. Most modern clips are based on the Gem type introduced in the 1890s, characterized by one-and-a-half loops.\n\nPaper clips have an oblong shape with straight sides, though triangular, circular, and novelty shapes exist. Alternatives include two-piece clamping systems and spring-fastened binder clips. Their simplicity and versatility have made them ubiquitous in offices, schools, and creative projects. A typical metal paper clip weighs about one gram.'}},
-                'readAloud2_content': { taskContent: { title: 'Read the following passage Aloud', passageTitle: 'Wood', passageBody: 'Wood is the structural xylem tissue in the stems and roots of trees and other woody plants-a composite of cellulose fibers (strong under tension) embedded in lignin (resistant to compression). In living trees it provides support and transports water and nutrients.\n\nHumans have used wood for millennia as fuel, construction material, and for tools, weapons, furniture, paper, and, more recently, purified cellulose products such as cellophane. As of 2020, global forest growing stock totaled roughly 557 billion m³, with nearly 4 billion m³ harvested annually (dominantly for construction and furniture). Wood science has been an established field since the early 20th century.'}},
-                'challengeInstructions': { taskContent: { title: 'Read the following Challenge instructions Aloud', passageTitle: '', passageBody: 'You will now prepare for a singing challenge. Your performance will be recorded and evaluated by a music professional. Songs you may be asked to sing are listed below. If you finish a song before the time ends. Start over from the beginning until the timer reaches 00:00.\n\nOnce you see the screen with lyrics to the song, begin singing!\n\nSong list:\n• I\'m a Little Teapot\n• Twinkle, Twinkle, Little Star\n• Mary Had a Little Lamb'}},
-                'singASong1_content': { taskContent: { title: 'Sing the following song Aloud', passageTitle: 'I\'m a Little Teapot', passageBody: 'Verse 1\nI\'m a little teapot, short and stout. Here is my handle, here is my spout. When the water\'s boiling, hear me shout: "Tip me over, pour me out!"\n\nVerse 2\nI\'m a little teapot, short and stout. Here is my handle, here is my spout. I can change my handle or my spout-"Tip me over, pour me out!"\n\nVerse 3\nI\'m a little teapot, short and stout. Here is my handle, here is my spout. When the water\'s boiling, hear me shout: "Tip me over, pour me out!"\n\nVerse 4\nI\'m a little teapot, short and stout. Here is my handle, here is my spout. I can change my handle or my spout - "Tip me over, pour me out!"'}},
-                'singASong2_content': { taskContent: { title: 'Sing the following song Aloud', passageTitle: 'Twinkle, Twinkle, Little Star', passageBody: 'Twinkle, twinkle, little star, How I wonder what you are!\n\nUp above the world so high, Like a diamond in the sky.\n\n\nWhen the blazing sun is set, And the grass with dew is wet,\n\nThen you show your little light-Twinkle, twinkle, all the night.\n\n\nThen the traveler in the dark. Thanks you for your tiny spark;\n\nHe could not see which way to go. If you did not twinkle so.\n\n\nAs your bright and tiny spark. Lights the traveler in the dark-\n\nThough I know not what you are, Twinkle, twinkle, little star.'}},
-                'singASong3_content': { taskContent: { title: 'Sing the following song Aloud', passageTitle: 'Mary Had a Little Lamb', passageBody: 'Verse 1:\nMary had a little lamb, little lamb, little lamb; Mary had a little lamb, its fleece was white as snow.\n\nVerse 2:\nAnd everywhere that Mary went, Mary went, Mary went; and everywhere that Mary went, the lamb was sure to go.\n\nVerse 3:\nIt followed her to school one day, school one day, school one day; it followed her to school one day, which was against the rule.\n\nVerse 4:\nIt made the children laugh and play, laugh and play, laugh and play; it made the children laugh and play to see the lamb at school.\n\nVerse 5:\nAnd so the teacher sent it out, sent it out, sent it out; and so the teacher sent it out, but still it lingered near.\n\nVerse 6:\nIt stood and waited round about, round about, round about; it stood and waited round about, till Mary did appear.\n\nVerse 7:\n"Why does the lamb love Mary so?" the little children cry.'}}
-            };
-        }
-
+        let responseTimer = null;
+        let isProcessing = false;
+        const words = ['RED', 'GREEN', 'BLUE', 'YELLOW'];
+        const colors = { red: 'red', green: 'green', blue: 'blue', yellow: '#FFBF00' };
+        const colorNames = Object.keys(colors);
+        const mismatchProbability = [0.2, 0.4, 0.7]; // Blocks 1, 2, 3
+        const practiceSteps = [
+            {instruction: "First, let's try a matching example. The word RED is shown in red color. Press 'R' or click the R button.", word: 'RED', color: 'red', expected: 'red'},
+            {instruction: "Now try this: The word GREEN is shown in green. Press 'G' or click the G button.", word: 'GREEN', color: 'green', expected: 'green'},
+            {instruction: "Now it gets tricky. The word says BLUE but it's colored red. Remember: respond to the COLOR (red), not the word. Press 'R'.", word: 'BLUE', color: 'red', expected: 'red'},
+            {instruction: "Another tricky one: The word says YELLOW but it's green. What color do you see? Press 'G' for green.", word: 'YELLOW', color: 'green', expected: 'green'},
+            {instruction: `<div class='text-center space-y-3'><p>During the test, a blue bar shows how much time you have left to answer.</p><div class='flex items-center justify-center gap-3'><svg class="w-8 h-8 text-gray-500 transform -rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg><div class="w-full max-w-xs bg-gray-200 rounded-full h-4"><div class="bg-indigo-600 h-4 rounded-full" style="width: 70%;"></div></div></div><p>If the bar runs out, the answer will be marked wrong.</p></div>`, isVisualExample: true, nextButtonOnly: true}
+        ];
+        // --- INITIALIZATION ---
         window.onload = function() {
-            initializeContent();
-            const firebaseConfig = {
-                apiKey: "AIzaSyDU_9f8mWWP6GHcJzW0BnzsmYUCvIBXooU",
-                authDomain: "sing-a-song-c80f1.firebaseapp.com",
-                projectId: "sing-a-song-c80f1",
-                storageBucket: "sing-a-song-c80f1.firebasestorage.app",
-                messagingSenderId: "542681033418",
-                appId: "1:542681033418:web:6bc5b4e8ecca456233"
-            };
-
+            const firebaseConfig = {apiKey: "AIzaSyAY-vUFdaTXQR9-B9tPFeQNgUd2CHdEBJ8", authDomain: "stroop-comp.firebaseapp.com", projectId: "stroop-comp", storageBucket: "stroop-comp.firebasestorage.app", messagingSenderId: "832246150640", appId: "1:832246150640:web:e35225f1dd629fa9335935"};
             try {
                 const app = initializeApp(firebaseConfig);
                 db = getFirestore(app);
@@ -203,185 +88,244 @@
                 document.getElementById('main-content').innerHTML = `<div class="bg-white p-8 rounded-lg shadow-xl"><h1 class="text-2xl font-bold text-red-600">Error: Could not connect to the server.</h1></div>`;
             }
         };
-
         async function signIn() {
             try {
                 await signInAnonymously(auth);
                 initializeSession();
             } catch (error) {
                 console.error("Authentication Error", error);
-                document.getElementById('main-content').innerHTML = `<h1>Authentication Failed</h1><p>${error.message}</p>`;
+                let errorMessage = `<h1>Authentication Failed</h1><p>${error.message}</p>`;
+                if (error.code === 'auth/operation-not-allowed') {
+                    errorMessage = `<div class="text-left max-w-3xl mx-auto bg-red-50 border-l-4 border-red-500 p-6 rounded-lg">...</div>`;
+                }
+                document.getElementById('main-content').innerHTML = `<div class="p-4">${errorMessage}</div>`;
             }
         }
-
-        function startHeartbeat() {
-            stopHeartbeat();
-            heartbeatInterval = setInterval(() => {
-                if (sessionId) {
-                    updateGameState({ participantHeartbeat: serverTimestamp() });
-                }
-            }, 30000);
-        }
-
-        function stopHeartbeat() {
-            clearInterval(heartbeatInterval);
-        }
-
         function initializeSession() {
-            sessionStartTime = new Date();
             sessionId = generateSessionId();
             document.getElementById('sessionIdDisplay').textContent = sessionId;
             document.getElementById('sessionIdContainer').classList.remove('hidden');
-            const userId = auth.currentUser?.uid || 'anonymous';
-            const appId = "sing-a-song-c80f1"; 
-            
-            const timezoneOffset = new Date().getTimezoneOffset();
-            
-            gameState = {
-                screenId: 'welcome',
-                sessionId: sessionId,
-                participantId: userId,
-                appId: appId,
-                timezoneOffset: timezoneOffset,
-                timer: { running: false, value: '0:00' },
-                taskContent: {}
-            };
-            updateGameState(gameState);
-            listenForCommands();
-            startHeartbeat();
+            updateGameState({screenId: 'welcome', sessionId: sessionId, participantId: auth.currentUser?.uid || 'anonymous'});
         }
-
-        function listenForCommands() {
-            const appId = "sing-a-song-c80f1";
-            const sessionRef = doc(db, `artifacts/${appId}/public/data/sessions`, sessionId);
-            onSnapshot(sessionRef, (doc) => {
-                if (!doc.exists()) return;
-                const data = doc.data();
-                if (data && data.command && data.command.commandId !== lastCommandId) {
-                    lastCommandId = data.command.commandId;
-                    handleCommand(data.command);
-                }
-            });
-        }
-
-        function handleCommand(command) {
-            if (command.type === 'screen') {
-                showScreen(command.screenId, command.taskContent);
-            } else if (command.type === 'timer') {
-                const currentScreenConfig = screenConfig[gameState.screenId];
-                if (!currentScreenConfig) return;
-
-                if (command.action === 'start') {
-                    startMainTimer(currentScreenConfig.timerId, remainingSeconds > 0 ? remainingSeconds : currentScreenConfig.duration);
-                } else if (command.action === 'stop') {
-                    stopMainTimer();
-                } else if (command.action === 'reset') {
-                    resetMainTimer(currentScreenConfig.timerId, currentScreenConfig.duration);
-                }
-            }
-        }
-
         function updateGameState(newState) {
-            gameState = { ...gameState, ...newState };
-            const appId = gameState.appId || 'sing-a-song-c80f1';
+            gameState = { ...gameState, ...newState, lastUpdate: serverTimestamp() };
+            const appId = "stroop-comp";
             if (db && sessionId) {
                 const sessionRef = doc(db, `artifacts/${appId}/public/data/sessions`, sessionId);
-                setDoc(sessionRef, { 
-                    ...gameState,
-                    lastUpdate: serverTimestamp()
-                 }, { merge: true });
+                setDoc(sessionRef, gameState, { merge: true }).catch(e => console.error("Firestore update failed: ", e));
             }
         }
-
-        function showScreen(screenId, taskContent = {}) {
-            stopMainTimer();
-
-            // FIX: Clear previous dynamic content to prevent duplicate element IDs
-            ['silentReading', 'readAloud', 'challengeInstructions', 'singASong'].forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.innerHTML = ''; 
-            });
-
+        window.showScreen = function(screenId, data = {}) {
             document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
             const screenEl = document.getElementById(screenId);
-            if (screenEl) screenEl.classList.remove('hidden');
-
-            if (screenId === 'complete' && sessionStartTime) {
-                const endTime = new Date(sessionStartTime.getTime() + (2 * 60 * 60 * 1000)); // 2 hours
-                const endTimeString = endTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                document.getElementById('endTimeDisplay').textContent = endTimeString;
-            }
-
-            if (['silentReading', 'readAloud', 'challengeInstructions', 'singASong'].includes(screenId)) {
-                screenEl.innerHTML = buildTaskScreen(screenId, taskContent);
-            }
-            
+            if(screenEl) screenEl.classList.remove('hidden');
+            clearTimeout(responseTimer);
             gameState.screenId = screenId;
-            gameState.taskContent = taskContent;
-            const currentScreenConfig = screenConfig[screenId];
-            if (currentScreenConfig) {
-                resetMainTimer(currentScreenConfig.timerId, currentScreenConfig.duration);
-            } else {
-                updateGameState({ timer: { running: false, value: '' } });
-            }
+            updateGameState({ screenId, ...data });
         }
-
-        function buildTaskScreen(screenId, content) {
-            const timerId = screenConfig[screenId].timerId;
-            const duration = screenConfig[screenId].duration;
-            const timerDisplay = formatTime(duration);
-
-            return `
-                <div class="max-w-4xl mx-auto">
-                    <h2 class="text-3xl font-bold text-gray-800 mb-2">${content.title || ''}</h2>
-                    <div class="text-8xl font-mono font-bold my-2 text-gray-800" id="${timerId}">${timerDisplay}</div>
-                    <div class="passage-box">
-                        <h3 class="text-2xl font-bold mb-4">${content.passageTitle || ''}</h3>
-                        <div class="text-gray-700 space-y-4 whitespace-pre-wrap">${content.passageBody || ''}</div>
-                    </div>
-                </div>
-            `;
+        window.startProtocol = () => {
+            document.getElementById('sessionIdContainer').classList.add('hidden'); 
+            showScreen('preBaselineSurvey');
+        };
+        window.startBaselineTimer = () => {
+            document.getElementById('startBaselineBtn').style.display = 'none';
+            document.getElementById('baselineTimer').style.display = 'block';
+            startMainTimer('baselineTimer', 3 * 60, () => showScreen('instructions'));
+            updateGameState({ timerRunning: true });
+        };
+        window.startPractice = () => {
+            gameState.practiceStep = 0;
+            showScreen('practice');
+            runPracticeStep();
+        };
+        window.handlePracticeNext = () => {
+            gameState.practiceStep++;
+            runPracticeStep();
         }
-
-        function formatTime(seconds) {
-            const minutes = Math.floor(seconds / 60);
-            const secs = seconds % 60;
-            return `${minutes}:${secs.toString().padStart(2, '0')}`;
-        }
-
-        function startMainTimer(timerId, duration) {
-            clearInterval(mainTimer);
-            remainingSeconds = duration;
-            const timerElement = document.getElementById(timerId);
+        function runPracticeStep() {
+            const instructionEl = document.getElementById('practiceInstruction');
+            const practiceElements = document.getElementById('practiceElements');
+            const startBtn = document.getElementById('startTestBtn');
+            const nextBtn = document.getElementById('practiceNextBtn');
             
-            updateGameState({ timer: { running: true, value: formatTime(remainingSeconds) } });
+            practiceElements.classList.add('hidden');
+            startBtn.classList.add('hidden');
+            nextBtn.classList.add('hidden');
 
-            mainTimer = setInterval(() => {
-                remainingSeconds--;
-                if(timerElement) timerElement.textContent = formatTime(remainingSeconds);
-                updateGameState({ timer: { running: true, value: formatTime(remainingSeconds) } });
-
-                if (remainingSeconds <= 0) {
-                    stopMainTimer();
+            let practiceState;
+            if (gameState.practiceStep < practiceSteps.length) {
+                const step = practiceSteps[gameState.practiceStep];
+                practiceState = {
+                    instruction: step.instruction,
+                    word: step.word || '',
+                    color: step.color ? colors[step.color] : 'transparent',
+                    feedback: '',
+                    isVisualExample: !!step.isVisualExample
+                };
+                
+                instructionEl.innerHTML = practiceState.instruction;
+                if (!step.isVisualExample) {
+                    practiceElements.classList.remove('hidden');
+                    document.getElementById('practiceWord').textContent = practiceState.word;
+                    document.getElementById('practiceWord').style.color = practiceState.color;
+                    document.getElementById('practiceFeedback').textContent = '';
                 }
-            }, 1000);
-        }
 
-        function stopMainTimer() {
-            clearInterval(mainTimer);
-            if (gameState.timer) {
-                updateGameState({ timer: { ...gameState.timer, running: false } });
+                if (step.nextButtonOnly) {
+                    nextBtn.classList.remove('hidden');
+                }
+
+            } else {
+                 const finalInstructionHTML = `<div class="space-y-2"><p class="font-bold text-xl">Now you are ready for the Color Match Challenge.</p><p>You will be competing against a simulated study participant.</p><p>The goal is to select the color of the text as <strong class="text-indigo-600">quickly and accurately</strong> as possible. Your performance will be evaluated by both.</p></div>`;
+                practiceState = {
+                    instruction: finalInstructionHTML,
+                    isComplete: true
+                };
+                instructionEl.innerHTML = finalInstructionHTML;
+                startBtn.classList.remove('hidden');
             }
+            updateGameState({ practice: practiceState });
         }
-
-        function resetMainTimer(timerId, duration) {
-            stopMainTimer();
-            remainingSeconds = duration;
+        window.checkPracticeResponse = (selectedColor) => {
+            if (gameState.practiceStep >= practiceSteps.length || isProcessing) return;
+            const feedbackEl = document.getElementById('practiceFeedback');
+            const expected = practiceSteps[gameState.practiceStep].expected;
+            let feedbackText;
+            if (selectedColor === expected) {
+                isProcessing = true;
+                feedbackText = 'Correct';
+                feedbackEl.className = 'text-2xl font-bold h-10 my-4 text-green-500';
+                gameState.practiceStep++;
+                setTimeout(() => {
+                    isProcessing = false;
+                    runPracticeStep();
+                }, 1500);
+            } else {
+                feedbackText = 'Try again...';
+                feedbackEl.className = 'text-2xl font-bold h-10 my-4 text-red-500';
+            }
+            feedbackEl.textContent = feedbackText;
+            updateGameState({ practice: {...gameState.practice, feedback: feedbackText} });
+        }
+        window.startColorTest = () => {
+            gameState.currentBlock = 1;
+            gameState.stats = { correct: 0, wrong: 0, blockStats: [] };
+            startBlock();
+        };
+        function startBlock() {
+            const blockNum = gameState.currentBlock;
+            gameState.stats.blockStats[blockNum - 1] = { correct: 0, wrong: 0 };
+            document.getElementById('blockTitle').textContent = `Color Response - Block ${blockNum}`;
+            document.getElementById('wrong').textContent = '0';
+            showScreen('colorTest');
+            document.getElementById('colorWord').style.opacity = '1';
+            startMainTimer('colorTimer', 3 * 60, endBlock);
+            setTimeout(presentWord, 1000);
+        }
+        function presentWord() {
+            if (gameState.screenId !== 'colorTest') return;
+            isProcessing = false;
+            const mismatch = Math.random() < mismatchProbability[gameState.currentBlock - 1];
+            const wordIndex = Math.floor(Math.random() * words.length);
+            let colorIndex;
+            do {
+                colorIndex = Math.floor(Math.random() * colorNames.length);
+            } while (mismatch && colorIndex === wordIndex);
+            if (!mismatch) colorIndex = wordIndex;
+            gameState.correctColorName = colorNames[colorIndex]; 
+            const wordEl = document.getElementById('colorWord');
+            wordEl.textContent = words[wordIndex];
+            wordEl.style.color = colors[gameState.correctColorName];
+            wordEl.style.opacity = '1';
+            document.getElementById('feedback').textContent = '';
+            const progressBar = document.getElementById('progressBar');
+            progressBar.style.transition = 'none';
+            progressBar.style.width = '100%';
+            void progressBar.offsetWidth;
+            progressBar.style.transition = 'width 1.5s linear';
+            progressBar.style.width = '0%';
+            responseTimer = setTimeout(handleTimeout, 1500);
+            updateGameState({block: {num: gameState.currentBlock, word: words[wordIndex], color: colors[gameState.correctColorName], feedback: '', wrongCount: gameState.stats.blockStats[gameState.currentBlock - 1].wrong, showProgressBar: true}});
+        }
+        function handleResponse(isCorrect) {
+            if (isProcessing) return;
+            isProcessing = true;
+            clearTimeout(responseTimer);
+            document.getElementById('colorWord').style.opacity = '0';
+            const blockStats = gameState.stats.blockStats[gameState.currentBlock - 1];
+            const feedbackEl = document.getElementById('feedback');
+            if (isCorrect) {
+                feedbackEl.textContent = 'CORRECT';
+                feedbackEl.className = 'text-4xl font-bold h-12 text-green-500';
+                blockStats.correct++;
+            } else {
+                feedbackEl.textContent = 'WRONG';
+                feedbackEl.className = 'text-4xl font-bold h-12 text-red-500';
+                blockStats.wrong++;
+            }
+            document.getElementById('wrong').textContent = blockStats.wrong;
+            updateGameState({stats: gameState.stats, block: { ...gameState.block, wrongCount: blockStats.wrong, feedback: feedbackEl.textContent, showProgressBar: false }});
+            setTimeout(presentWord, 200); 
+        }
+        window.checkResponse = (selectedColor) => {
+            handleResponse(selectedColor === gameState.correctColorName);
+        };
+        function handleTimeout() {
+            document.getElementById('feedback').textContent = 'TOO SLOW';
+            handleResponse(false);
+        }
+        function endBlock() {
+            clearInterval(mainTimer);
+            const blockStats = gameState.stats.blockStats[gameState.currentBlock - 1];
+            const total = blockStats.correct + blockStats.wrong;
+            const accuracy = total > 0 ? Math.round((blockStats.correct / total) * 100) : 0;
+            let competitorAccuracy = Math.min(99, accuracy + Math.floor(Math.random() * 6) + 3); 
+            if (accuracy === 100) competitorAccuracy = 100;
+            const compTotal = total + Math.floor(Math.random() * 5); 
+            const compCorrect = Math.round(compTotal * (competitorAccuracy / 100));
+            const compWrong = compTotal - compCorrect;
+            document.getElementById('blockCompleteTitle').textContent = `Block ${gameState.currentBlock} Complete`;
+            document.getElementById('blockCorrect').textContent = blockStats.correct;
+            document.getElementById('blockWrong').textContent = blockStats.wrong;
+            document.getElementById('blockAccuracy').textContent = accuracy;
+            document.getElementById('competitorCorrect').textContent = compCorrect;
+            document.getElementById('competitorWrong').textContent = compWrong;
+            document.getElementById('competitorAccuracy').textContent = competitorAccuracy;
+            showScreen('blockComplete', {blockComplete: {user: { correct: blockStats.correct, wrong: blockStats.wrong, accuracy: accuracy }, competitor: { correct: compCorrect, wrong: compWrong, accuracy: competitorAccuracy }}});
+        }
+        window.nextBlock = () => {
+            gameState.currentBlock++;
+            if (gameState.currentBlock <= 3) {
+                startBlock();
+            } else {
+                showScreen('preMealSurvey');
+            }
+        };
+        window.startMealTimer = () => {
+            document.getElementById('startMealBtn').style.display = 'none';
+            document.getElementById('mealTimer').style.display = 'block';
+            startMainTimer('mealTimer', 5 * 60, () => showScreen('complete'));
+            updateGameState({ timerRunning: true });
+        };
+        function startMainTimer(timerId, seconds, callback) {
+            clearInterval(mainTimer);
+            let remaining = seconds;
             const timerElement = document.getElementById(timerId);
-            if(timerElement) timerElement.textContent = formatTime(duration);
-            updateGameState({ timer: { running: false, value: formatTime(duration) } });
+            function tick() {
+                const minutes = Math.floor(remaining / 60);
+                const secs = remaining % 60;
+                const timeString = `${minutes}:${secs.toString().padStart(2, '0')}`;
+                timerElement.textContent = timeString;
+                updateGameState({ timer: timeString });
+                if (remaining <= 0) {
+                    clearInterval(mainTimer);
+                    if (callback) callback();
+                }
+                remaining--;
+            }
+            tick();
+            mainTimer = setInterval(tick, 1000);
         }
-
         function generateSessionId() {
             const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
             let result = '';
@@ -390,6 +334,36 @@
             }
             return result;
         }
+        document.addEventListener('keydown', (e) => {
+            if (isProcessing) return;
+            const keyMap = { 'r': 'red', 'g': 'green', 'b': 'blue', 'y': 'yellow' };
+            const color = keyMap[e.key.toLowerCase()];
+            if (color) {
+                if (gameState.screenId === 'practice') {
+                    checkPracticeResponse(color);
+                } else if (gameState.screenId === 'colorTest') {
+                    checkResponse(color);
+                }
+            }
+        });
+        window.skipToNext = () => {
+            clearInterval(mainTimer);
+            clearTimeout(responseTimer);
+            switch(gameState.screenId) {
+                case 'welcome': startProtocol(); break;
+                case 'preBaselineSurvey': showScreen('baseline'); break;
+                case 'baseline': showScreen('instructions'); break;
+                case 'instructions': startPractice(); break;
+                case 'practice': startColorTest(); break;
+                case 'colorTest': endBlock(); break;
+                case 'blockComplete': nextBlock(); break;
+                case 'preMealSurvey': showScreen('meal', { timer: '5:00', timerRunning: false }); break;
+                case 'meal': showScreen('complete'); break;
+            }
+        }
+        const styleSheet = document.createElement("style");
+        styleSheet.innerText = `.button { transition: background-color 0.2s, transform 0.2s; } .hidden { display: none; } .response-button {font-family: 'Inter', sans-serif; font-weight: 900; font-size: 2.25rem; border: 2px solid black; color: black; background-color: white; width: 80px; height: 80px; border-radius: 50%; cursor: pointer; transition: all 0.1s ease-out; display: flex; align-items: center; justify-content: center;} .response-button:hover { background-color: #f0f0f0; transform: scale(1.1); } .response-button:active { transform: scale(0.95); background-color: #e0e0f0; }`;
+        document.head.appendChild(styleSheet);
     </script>
 </body>
 </html>
