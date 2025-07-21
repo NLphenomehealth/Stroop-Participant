@@ -176,7 +176,7 @@
                 'readAloud2_content': { taskContent: { title: 'Read the following passage Aloud', passageTitle: 'Wood', passageBody: 'Wood is the structural xylem tissue in the stems and roots of trees and other woody plants-a composite of cellulose fibers (strong under tension) embedded in lignin (resistant to compression). In living trees it provides support and transports water and nutrients.\n\nHumans have used wood for millennia as fuel, construction material, and for tools, weapons, furniture, paper, and, more recently, purified cellulose products such as cellophane. As of 2020, global forest growing stock totaled roughly 557 billion m³, with nearly 4 billion m³ harvested annually (dominantly for construction and furniture). Wood science has been an established field since the early 20th century.'}},
                 'challengeInstructions': { taskContent: { title: 'Read the following Challenge instructions Aloud', passageTitle: '', passageBody: 'You will now prepare for a singing challenge. Your performance will be recorded and evaluated by a music professional. Songs you may be asked to sing are listed below. If you finish a song before the time ends. Start over from the beginning until the timer reaches 00:00.\n\nOnce you see the screen with lyrics to the song, begin singing!\n\nSong list:\n• I\'m a Little Teapot\n• Twinkle, Twinkle, Little Star\n• Mary Had a Little Lamb'}},
                 'singASong1_content': { taskContent: { title: 'Sing the following song Aloud', passageTitle: 'I\'m a Little Teapot', passageBody: 'Verse 1\nI\'m a little teapot, short and stout. Here is my handle, here is my spout. When the water\'s boiling, hear me shout: "Tip me over, pour me out!"\n\nVerse 2\nI\'m a little teapot, short and stout. Here is my handle, here is my spout. I can change my handle or my spout-"Tip me over, pour me out!"\n\nVerse 3\nI\'m a little teapot, short and stout. Here is my handle, here is my spout. When the water\'s boiling, hear me shout: "Tip me over, pour me out!"\n\nVerse 4\nI\'m a little teapot, short and stout. Here is my handle, here is my spout. I can change my handle or my spout - "Tip me over, pour me out!"'}},
-                'singASong2_content': { taskContent: { title: 'Sing the following song Aloud', passageTitle: 'Twinkle, Twinkle, Little Star', passageBody: 'Twinkle, twinkle, little star, How I wonder what you are! Up above the world so high, Like a diamond in the sky.\n\nWhen the blazing sun is set, And the grass with dew is wet, Then you show your little light-Twinkle, twinkle, all the night.\n\nThen the traveler in the dark. Thanks you for your tiny spark; He could not see which way to go. If you did not twinkle so.\n\nAs your bright and tiny spark. Lights the traveler in the dark-Though I know not what you are, Twinkle, twinkle, little star.'}},
+                'singASong2_content': { taskContent: { title: 'Sing the following song Aloud', passageTitle: 'Twinkle, Twinkle, Little Star', passageBody: 'Twinkle, twinkle, little star, How I wonder what you are!\n\nUp above the world so high, Like a diamond in the sky.\n\n\nWhen the blazing sun is set, And the grass with dew is wet,\n\nThen you show your little light-Twinkle, twinkle, all the night.\n\n\nThen the traveler in the dark. Thanks you for your tiny spark;\n\nHe could not see which way to go. If you did not twinkle so.\n\n\nAs your bright and tiny spark. Lights the traveler in the dark-\n\nThough I know not what you are, Twinkle, twinkle, little star.'}},
                 'singASong3_content': { taskContent: { title: 'Sing the following song Aloud', passageTitle: 'Mary Had a Little Lamb', passageBody: 'Verse 1:\nMary had a little lamb, little lamb, little lamb; Mary had a little lamb, its fleece was white as snow.\n\nVerse 2:\nAnd everywhere that Mary went, Mary went, Mary went; and everywhere that Mary went, the lamb was sure to go.\n\nVerse 3:\nIt followed her to school one day, school one day, school one day; it followed her to school one day, which was against the rule.\n\nVerse 4:\nIt made the children laugh and play, laugh and play, laugh and play; it made the children laugh and play to see the lamb at school.\n\nVerse 5:\nAnd so the teacher sent it out, sent it out, sent it out; and so the teacher sent it out, but still it lingered near.\n\nVerse 6:\nIt stood and waited round about, round about, round about; it stood and waited round about, till Mary did appear.\n\nVerse 7:\n"Why does the lamb love Mary so?" the little children cry.'}}
             };
         }
@@ -189,7 +189,7 @@
                 projectId: "sing-a-song-c80f1",
                 storageBucket: "sing-a-song-c80f1.firebasestorage.app",
                 messagingSenderId: "542681033418",
-                appId: "1:542681033418:web:6bc5b42bb4e8ecca456233"
+                appId: "1:542681033418:web:6bc5b4e8ecca456233"
             };
 
             try {
@@ -266,8 +266,7 @@
 
         function handleCommand(command) {
             if (command.type === 'screen') {
-                const fullTaskContent = allConfigs[command.taskKey]?.taskContent || command.taskContent;
-                showScreen(command.screenId, fullTaskContent, command.taskKey);
+                showScreen(command.screenId, command.taskContent);
             } else if (command.type === 'timer') {
                 const currentScreenConfig = screenConfig[gameState.screenId];
                 if (!currentScreenConfig) return;
@@ -294,8 +293,15 @@
             }
         }
 
-        function showScreen(screenId, taskContent = {}, taskKey = null) {
+        function showScreen(screenId, taskContent = {}) {
             stopMainTimer();
+
+            // FIX: Clear previous dynamic content to prevent duplicate element IDs
+            ['silentReading', 'readAloud', 'challengeInstructions', 'singASong'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.innerHTML = ''; 
+            });
+
             document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
             const screenEl = document.getElementById(screenId);
             if (screenEl) screenEl.classList.remove('hidden');
@@ -307,8 +313,7 @@
             }
 
             if (['silentReading', 'readAloud', 'challengeInstructions', 'singASong'].includes(screenId)) {
-                const contentToShow = allConfigs[taskKey]?.taskContent || taskContent;
-                screenEl.innerHTML = buildTaskScreen(screenId, contentToShow);
+                screenEl.innerHTML = buildTaskScreen(screenId, taskContent);
             }
             
             gameState.screenId = screenId;
